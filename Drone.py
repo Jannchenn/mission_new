@@ -49,6 +49,8 @@ class Drone:
         self.event_set = set()
         self.wind_speed = ws
         self.wind_direction = wd
+        self.cur_r = 0
+        self.cur_c = 0
 
         self.speed = 46 #?????????
 
@@ -92,11 +94,14 @@ class Drone:
         fly the drone according to the policy
         """
         pre_dir = self.policy.get_direction()
-        data = self.policy.random()
+        reward = self.collect_data(self.cur_c, self.cur_r)
+        data = self.policy.random(reward)
         c = data[0]
         r = data[1]
         d = data[2]
-        self.collect_data(c, r)
+        self.cur_r = r
+        self.cur_c = c
+
         # adding noise
         self.time_now += self.get_wind_fly_time(d) + get_turn_fly_time(pre_dir, d)
         self.update_map()
@@ -110,6 +115,7 @@ class Drone:
         # Collect and update explore map
         self.total_visit += 1
         self.movements.append((c, r))
+        count_event = 0
 
         now_time = 18888 #!!!!!!!
         self.explore[c][r].last_time_visit = now_time
@@ -120,11 +126,15 @@ class Drone:
             has_event = True
             self.total_events += len(events)
             for event in events:
+                if event not in self.event_set:
+                    count_event += 1
                 event_id.append(event.id)
                 self.times_hasEvent[event][(c, r)].append(now_time)
                 self.event_set.add(event)
         self.explore[c][r].has_event = has_event
         self.explore[c][r].id = event_id
+
+        return count_event
 
         # print("EVENT: " + str(has_event))
 
@@ -231,9 +241,9 @@ class Drone:
         :param d: The drone moving direction
         :return: The time effect for the wind
         """
-        if self.wind_direction == 'l' and d == 'l' or self.wind_direction == 'r' and d == 'r' or self.wind_direction == 'u' and d == 'u' or self.wind_speed == 'd' and d == 'd':
+        if self.wind_direction == 0 and d == 0 or self.wind_direction == 1 and d == 1 or self.wind_direction == 2 and d == 2 or self.wind_speed == 3 and d == 3:
             return 10 / (5 + 0.2 * self.wind_speed)
-        elif self.wind_direction == 'l' and d == 'r' or self.wind_direction == 'r' and d == 'l' or self.wind_direction == 'u' and d == 'd' or self.wind_speed == 'd' and d == 'u':
+        elif self.wind_direction == 0 and d == 1 or self.wind_direction == 1 and d == 0 or self.wind_direction == 2 and d == 3 or self.wind_speed == 3 and d == 2:
             return -10 / (5 + 0.2 * self.wind_speed)
         else:
             return 10 / (5 + 0.1 * self.wind_speed)
@@ -248,9 +258,9 @@ def get_turn_fly_time(pre_dir, d):
     :param d: moving direction
     :return: the time effect for turning
     """
-    if pre_dir == 'l' and d == 'l' or pre_dir == 'r' and d == 'r' or pre_dir == 'd' and d == 'd' or pre_dir == 'u' and d == 'u':
+    if pre_dir == 0 and d == 0 or pre_dir == 1 and d == 1 or pre_dir == 2 and d == 2 or pre_dir == 3 and d == 3:
         return 0
-    elif pre_dir == 'l' and d == 'r' or pre_dir == 'r' and d == 'l' or pre_dir == 'd' and d == 'u' or pre_dir == 'u' and d == 'd':
+    elif pre_dir == 0 and d == 1 or pre_dir == 1 and d == 0 or pre_dir == 2 and d == 3 or pre_dir == 3 and d == 2:
         return 2 * 1.5
     else:
         return 2 * 1.3

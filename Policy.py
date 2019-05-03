@@ -5,7 +5,7 @@
 #
 # ======================================================================
 
-from random import randrange, random
+from random import randrange, random, randint
 from collections import defaultdict
 import numpy as np
 
@@ -18,26 +18,53 @@ class Policy:
         self.start = start
         self.end = end
         self.cur = (0, 0)
-        self.dir = 'l'
+        self.dir = 0
         self.switch = 0
         self.__colDimension = col_dim
         self.__rowDimension = row_dim
         self.cord_map = change_to_map(board, row_dim * col_dim)
 
-    def random(self):
+    def random(self, r):
         """
         This method provides drone to fly randomly
         :reutrn: the tuple of col, row, and wpl
         """
         nei = self._check_neighbor()
-        
-        next_move = nei[randrange(0, len(nei))]
+        dir_list = []
+        for n in nei.keys():
+            dir_list.append(n)
+        max_q = -1000
+        max_position = (0, 0, 0, 0)
+        for d in dir_list:
+            mq = self.q_table[d].argmax()
+            m1, m2, m3 = np.unravel_index(np.argmax(self.q_table[d], axis=None), self.q_table[d].shape)
+            if mq > max_q:
+                max_q = mq
+                max_position = (d, m1, m2, m3)
+
+        to_go_dir = max_position[0]
+
+        n = randint(1, 10)
+        if n in [1, 2, 3, 4, 5]:
+            next_move = nei[to_go_dir]
+        else:
+            assert len(dir_list) == len(nei)
+            explore_dir = dir_list[randint(0, len(dir_list)-1)]
+            next_move = nei[explore_dir]
+            max_q = self.q_table[explore_dir].argmax()
+            m1, m2, m3 = np.unravel_index(np.argmax(self.q_table[explore_dir], axis=None), self.q_table[explore_dir].shape)
+            max_position = explore_dir, m1, m2, m3
+
+        Q = r + 0.9 * max_q
+
+        self.q_table[max_position] = Q
+
         c = next_move[0]
         r = next_move[1]
-        d = next_move[2]
+
         self.cur = (c, r)
-        self.dir = d
-        return c, r, d
+        self.dir = to_go_dir
+        return c, r, to_go_dir
 
     def roomba(self):
         """
@@ -122,21 +149,21 @@ class Policy:
         This function checks and return all the neighbors
         :return: list of the valid neighbors(index) that the current position has
         """
-        result = []
+        result = dict()
         c = self.cur[0]
         r = self.cur[1]
-        up = (c, r+1, 'u')
-        down = (c, r-1, 'd')
-        left = (c-1, r, 'l')
-        right = (c+1, r, 'r')
+        up = (c, r+1)
+        down = (c, r-1)
+        left = (c-1, r)
+        right = (c+1, r)
         if r+1 < self.__rowDimension:
-            result.append(up)
+            result[3] = up
         if r-1 >= 0:
-            result.append(down)
+            result[2] = down
         if c-1 >= 0:
-            result.append(left)
+            result[0] = left
         if c+1 < self.__rowDimension:
-            result.append(right)
+            result[1] = right
         return result
 
 

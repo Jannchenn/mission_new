@@ -36,7 +36,7 @@ if __name__ == "__main__":
     paras = get_paras()
     row = int(paras[0].split()[0])
     col = int(paras[0].split()[1])
-    wind_dir = paras[-1].split()[0]
+    wind_dir = int(paras[-1].split()[0])
     wind_speed = int(paras[-1].split()[1])
 
     board = Board.board

@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="df57d15e-78f7-4b48-aca9-1cde6d7b9096" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Board.py" afterPath="$PROJECT_DIR$/Board.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Drone.py" afterPath="$PROJECT_DIR$/Drone.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/DroneExplore_dur.sh" afterPath="$PROJECT_DIR$/DroneExplore_dur.sh" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Main.py" afterPath="$PROJECT_DIR$/Main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Policy.py" afterPath="$PROJECT_DIR$/Policy.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/WriteReport.py" afterPath="$PROJECT_DIR$/WriteReport.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/boardinput.txt" afterPath="$PROJECT_DIR$/boardinput.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/fix_paras.txt" afterPath="$PROJECT_DIR$/fix_paras.txt" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -22,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Drone.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Drone.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Drone.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state relative-caret-position="163">
+              <caret line="97" column="40" lean-forward="false" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="40" />
               <folding>
                 <element signature="e#225#236#0" expanded="true" />
               </folding>
@@ -61,8 +56,8 @@
       <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="43" column="95" lean-forward="false" selection-start-line="43" selection-start-column="95" selection-end-line="43" selection-end-column="95" />
+            <state relative-caret-position="264">
+              <caret line="37" column="34" lean-forward="true" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
               <folding>
                 <element signature="e#366#378#0" expanded="true" />
               </folding>
@@ -70,13 +65,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Policy.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Policy.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Policy.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="32" column="8" lean-forward="true" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="8" />
+            <state relative-caret-position="-74">
+              <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
               <folding>
-                <element signature="e#250#286#0" expanded="true" />
+                <element signature="e#250#295#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -141,8 +136,8 @@
       <find>now_time</find>
       <find>_check_neighbor</find>
       <find>time_info</find>
-      <find>change_to_map</find>
       <find>get_wind_fly_time</find>
+      <find>change_to_map</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -155,11 +150,11 @@
         <option value="$PROJECT_DIR$/Edit.py" />
         <option value="$PROJECT_DIR$/Arena.py" />
         <option value="$PROJECT_DIR$/Event.py" />
-        <option value="$PROJECT_DIR$/fix_paras.txt" />
         <option value="$PROJECT_DIR$/DroneExplore_dur.sh" />
         <option value="$PROJECT_DIR$/Board.py" />
         <option value="$PROJECT_DIR$/WriteReport.py" />
         <option value="$PROJECT_DIR$/Main.py" />
+        <option value="$PROJECT_DIR$/fix_paras.txt" />
         <option value="$PROJECT_DIR$/Drone.py" />
         <option value="$PROJECT_DIR$/Policy.py" />
       </list>
@@ -318,9 +313,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="16" column="16" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="16" />
-          <folding>
-            <element signature="e#250#286#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -448,10 +441,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fix_paras.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="3" lean-forward="true" selection-start-line="2" selection-start-column="3" selection-end-line="2" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="43" column="95" lean-forward="false" selection-start-line="43" selection-start-column="95" selection-end-line="43" selection-end-column="95" />
+        <state relative-caret-position="264">
+          <caret line="37" column="34" lean-forward="true" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
           <folding>
             <element signature="e#366#378#0" expanded="true" />
           </folding>
@@ -468,30 +469,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fix_paras.txt">
+    <entry file="file://$PROJECT_DIR$/Policy.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="3" lean-forward="true" selection-start-line="2" selection-start-column="3" selection-end-line="2" selection-end-column="3" />
-          <folding />
+        <state relative-caret-position="-74">
+          <caret line="43" column="0" lean-forward="true" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+          <folding>
+            <element signature="e#250#295#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Drone.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        <state relative-caret-position="163">
+          <caret line="97" column="40" lean-forward="false" selection-start-line="97" selection-start-column="34" selection-end-line="97" selection-end-column="40" />
           <folding>
             <element signature="e#225#236#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Policy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="32" column="8" lean-forward="true" selection-start-line="32" selection-start-column="8" selection-end-line="32" selection-end-column="8" />
-          <folding>
-            <element signature="e#250#286#0" expanded="true" />
           </folding>
         </state>
       </provider>
