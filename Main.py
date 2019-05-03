@@ -36,17 +36,16 @@ if __name__ == "__main__":
     paras = get_paras()
     row = int(paras[0].split()[0])
     col = int(paras[0].split()[1])
+    wind_dir = paras[-1].split()[0]
+    wind_speed = int(paras[-1].split()[1])
 
     board = Board.board
     policy = Policy.Policy(board, (0, 0), (0, row-1), col, row)
-    if paras[-3] == "roomba":
-        drone = Drone.Drone(Board.board_info, policy.roomba, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
-    else:
-        drone = Drone.Drone(Board.board_info, policy.random, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
+    drone = Drone.Drone(Board.board_info, policy, int(paras[1]), row, col, wind_speed, wind_dir)
     drone.run()
     t = drone.get_time()
-    WriteReport.time_info(t[0], t[1])
-    total_events = Board.board_info.get_total_events()
+    #WriteReport.time_info(t[0], t[1])
+    total_events = drone.get_total_events()
     total_caught_events = drone.get_total_caught_event()
     total_caught_events_include_same = drone.get_total_caught_event_include_same()
     WriteReport.stats(total_events, total_caught_events, "catch_rate.txt")

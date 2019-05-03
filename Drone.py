@@ -20,7 +20,7 @@ class Drone:
         has_event = False
         id = 0
 
-    def __init__(self, board, policy, fix, r, row, col):
+    def __init__(self, board, policy, r, row, col, ws, wd):
         """
         Initializes drone flight characteristcs
         :param board: The board for the drone to explore
@@ -33,7 +33,6 @@ class Drone:
         """
 
         self.policy = policy
-        self.fix = fix
         self.round = r
         self.__colDimension = col
         self.__rowDimension = row
@@ -48,6 +47,8 @@ class Drone:
         self.end = 0
         self.count = 0
         self.event_set = set()
+        self.wind_speed = ws
+        self.wind_direction = wd
 
         self.speed = 46 #?????????
 
@@ -70,34 +71,6 @@ class Drone:
         """
         return len(self.times_hasEvent)
 
-    # def missed_events(self):
-    #     """
-    #     Updates self.missed so that track the missed events for each sector.
-    #     :return: the total number of events generated
-    #     """
-    #     count = 0
-    #     for row in range(self.__rowDimension):
-    #         for col in range(self.__colDimension):
-    #             max_id = board_info.get_max_id(col, row)
-    #             count += max_id
-    #             if (col, row) not in self.times_hasEvent.keys():
-    #                 self.missed[(col, row)] += max_id
-    #             else:
-    #                 events = self.times_hasEvent[(col, row)].keys()
-    #                 for i in range(max_id):
-    #                     if i + 1 not in events:
-    #                         self.missed[(col, row)] += 1
-    #     return count
-    #
-    # def total_missed_events(self):
-    #     """
-    #     This method will count the TOTAL missed events
-    #     """
-    #     result = 0
-    #     for val in self.missed.values():
-    #         result += val
-    #     return result
-
     def run(self):
         """
         flies vehicle according to fixed time or fixed movement, which is
@@ -105,16 +78,11 @@ class Drone:
         """
 
         self.start = glb_time
-        if self.fix == "time":
-            timeout = glb_time + self.round  # round minutes from now
-            while True:
-                if self.time_now > timeout:
-                    break
-                self.fly()
-
-        elif self.fix == "movement":
-            for _ in range(self.round):
-                self.fly()
+        timeout = glb_time + self.round  # round seconds from now
+        while True:
+            if self.time_now > timeout:
+                break
+            self.fly()
 
         self.end = self.time_now
         #self.count = self.missed_events()
@@ -123,17 +91,21 @@ class Drone:
         """
         fly the drone according to the policy
         """
-        data = self.policy()
+        pre_dir = self.policy.get_direction()
+        data = self.policy.random()
         c = data[0]
         r = data[1]
+        d = data[2]
         self.collect_data(c, r)
-        self.time_now += 6  #!!!!!!!!!!!!!!!!!!!!
+        # adding noise
+        self.time_now += self.get_wind_fly_time(d) + get_turn_fly_time(pre_dir, d)
         self.update_map()
 
     def collect_data(self, c, r):
         """
         For each sector we reached, we need to collect information from it, aka fly log
-        :param c: the coloum of the board; r: the row of the board; wpl: the loaction of the sector
+        :param c: the coloum of the board;
+        :param r: the row of the board; wpl: the loaction of the sector
         """
         # Collect and update explore map
         self.total_visit += 1
@@ -187,7 +159,7 @@ class Drone:
                     self.__board[cur_c][cur_r].event_list.append(event)
                     self.__board[cur_c][cur_r].num_of_events += 1
                     self.__board[cur_c][cur_r].time_with_events += stay_time
-                    self.__events[event] = (cur_c,cur_r)
+                    self.__events[event] = (cur_c, cur_r)
                     c = cur_c
                     r = cur_r
         for event in events_to_remove:
@@ -216,6 +188,8 @@ class Drone:
             self.__board[c][r].time_with_events += stay_time
             # self.__total_dur += stay_time
             self.next_add_event_time = self.next_add_event_time + self.arrival_rate()
+
+        #print(self.__total_events)
 
     def get_stats_info(self):
         """
@@ -246,3 +220,37 @@ class Drone:
 
     def get_total_caught_event(self):
         return len(self.event_set)
+
+    def get_total_events(self):
+        return self.__total_events
+
+    def get_wind_fly_time(self, d):
+        """
+        We set the distance between each sector 10 meters.
+        We set the speed for drone is 5m/s
+        :param d: The drone moving direction
+        :return: The time effect for the wind
+        """
+        if self.wind_direction == 'l' and d == 'l' or self.wind_direction == 'r' and d == 'r' or self.wind_direction == 'u' and d == 'u' or self.wind_speed == 'd' and d == 'd':
+            return 10 / (5 + 0.2 * self.wind_speed)
+        elif self.wind_direction == 'l' and d == 'r' or self.wind_direction == 'r' and d == 'l' or self.wind_direction == 'u' and d == 'd' or self.wind_speed == 'd' and d == 'u':
+            return -10 / (5 + 0.2 * self.wind_speed)
+        else:
+            return 10 / (5 + 0.1 * self.wind_speed)
+
+
+def get_turn_fly_time(pre_dir, d):
+    """
+    We set the speed for drone is 5m/s
+    We set the distance between each sector is 10m
+    So under perfect situation, the drone takes 2s to fly
+    :param pre_dir: previous direction
+    :param d: moving direction
+    :return: the time effect for turning
+    """
+    if pre_dir == 'l' and d == 'l' or pre_dir == 'r' and d == 'r' or pre_dir == 'd' and d == 'd' or pre_dir == 'u' and d == 'u':
+        return 0
+    elif pre_dir == 'l' and d == 'r' or pre_dir == 'r' and d == 'l' or pre_dir == 'd' and d == 'u' or pre_dir == 'u' and d == 'd':
+        return 2 * 1.5
+    else:
+        return 2 * 1.3

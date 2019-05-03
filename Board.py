@@ -124,7 +124,7 @@ try:
     f1 = open("fix_paras.txt", "r")
     f2 = open("boardinput.txt", "r")
 except IOError:
-    print "Cannot open"
+    print ("Cannot open")
 else:
     paras = f1.read().split('\n')
     indep_var = f2.read().split('\n')[0].split()

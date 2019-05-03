@@ -7,14 +7,18 @@
 
 from random import randrange, random
 from collections import defaultdict
+import numpy as np
 
 
-class Policy():
+class Policy:
     def __init__(self, board, start, end, col_dim, row_dim):
+        self.q_table = np.random.randint(-2, 20, size=(4, 4, 4, 4))
+
         self.board = board
         self.start = start
         self.end = end
         self.cur = (0, 0)
+        self.dir = 'l'
         self.switch = 0
         self.__colDimension = col_dim
         self.__rowDimension = row_dim
@@ -26,11 +30,14 @@ class Policy():
         :reutrn: the tuple of col, row, and wpl
         """
         nei = self._check_neighbor()
-        i = nei[randrange(0, len(nei))]
-        c = self.board[i][0]
-        r = self.board[i][1]
+        
+        next_move = nei[randrange(0, len(nei))]
+        c = next_move[0]
+        r = next_move[1]
+        d = next_move[2]
         self.cur = (c, r)
-        return c, r
+        self.dir = d
+        return c, r, d
 
     def roomba(self):
         """
@@ -49,6 +56,9 @@ class Policy():
             self.switch = 0
             return self._vertical()
         return temp
+
+    def get_direction(self):
+        return self.dir
 
     def _horizontal(self):
         """
@@ -115,19 +125,18 @@ class Policy():
         result = []
         c = self.cur[0]
         r = self.cur[1]
-        cords = set(self.cord_map.keys())
-        up = (c, r+1)
-        down = (c, r-1)
-        left = (c-1, r)
-        right = (c+1, r)
-        if up in cords:
-            result.append(self.cord_map[up])
-        if down in cords:
-            result.append(self.cord_map[down])
-        if left in cords:
-            result.append(self.cord_map[left])
-        if right in cords:
-            result.append(self.cord_map[right])
+        up = (c, r+1, 'u')
+        down = (c, r-1, 'd')
+        left = (c-1, r, 'l')
+        right = (c+1, r, 'r')
+        if r+1 < self.__rowDimension:
+            result.append(up)
+        if r-1 >= 0:
+            result.append(down)
+        if c-1 >= 0:
+            result.append(left)
+        if c+1 < self.__rowDimension:
+            result.append(right)
         return result
 
 
@@ -149,6 +158,7 @@ def change_to_map(board, l):
     """
     Given the board, return a dictionary
     :param board: the board to be transferred
+    :param l: total number of sectors
     :return: the dictionary, key: (c,r), val: index
     """
     result = defaultdict(int)

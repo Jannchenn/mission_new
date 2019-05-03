@@ -1,4 +1,3 @@
 10 10
-random
-movement
-100
+600
+l 2
