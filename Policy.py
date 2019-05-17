@@ -20,11 +20,14 @@ class Policy:
         self.cur = (0, 0)
         self.dir = 0
         self.switch = 0
+        self.min = set()
         self.__colDimension = col_dim
         self.__rowDimension = row_dim
         self.cord_map = change_to_map(board, row_dim * col_dim)
+        self.pre = 0
+        self.nxt = 0
 
-    def random(self, r):
+    def random(self, r, t, er):
         """
         This method provides drone to fly randomly
         :reutrn: the tuple of col, row, and wpl
@@ -45,15 +48,28 @@ class Policy:
         to_go_dir = max_position[0]
 
         n = randint(1, 10)
-        if n in [1, 2, 3, 4, 5]:
-            next_move = nei[to_go_dir]
+        self.nxt = r
+        if t < 600:
+            if n in [1, 2]:
+                next_move = nei[to_go_dir]
+            else:
+                assert len(dir_list) == len(nei)
+                explore_dir = dir_list[randint(0, len(dir_list)-1)]
+                next_move = nei[explore_dir]
+                max_q = self.q_table[explore_dir].argmax()
+                m1, m2, m3 = np.unravel_index(np.argmax(self.q_table[explore_dir], axis=None), self.q_table[explore_dir].shape)
+                max_position = explore_dir, m1, m2, m3
+            r = t // 30
+            if r not in self.min:
+                print(er, r)
+                self.min.add(r)
         else:
-            assert len(dir_list) == len(nei)
-            explore_dir = dir_list[randint(0, len(dir_list)-1)]
-            next_move = nei[explore_dir]
-            max_q = self.q_table[explore_dir].argmax()
-            m1, m2, m3 = np.unravel_index(np.argmax(self.q_table[explore_dir], axis=None), self.q_table[explore_dir].shape)
-            max_position = explore_dir, m1, m2, m3
+            next_move = nei[to_go_dir]
+            #print(er, next_move)
+            # r = t // 30
+            # if r not in self.min:
+            #     print(er, r)
+            #     self.min.add(r)
 
         Q = r + 0.9 * max_q
 
@@ -64,6 +80,7 @@ class Policy:
 
         self.cur = (c, r)
         self.dir = to_go_dir
+
         return c, r, to_go_dir
 
     def roomba(self):

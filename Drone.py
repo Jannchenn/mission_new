@@ -42,7 +42,7 @@ class Drone:
         self.total_visit = 0
         self.total_events = 0
         self.movements = list()
-        self.missed = defaultdict(int)
+        #self.missed = defaultdict(int)
         self.start = 0
         self.end = 0
         self.count = 0
@@ -51,6 +51,9 @@ class Drone:
         self.wind_direction = wd
         self.cur_r = 0
         self.cur_c = 0
+        self.learning_event_set = set()
+        self.learning_total_events = 0
+        self.flag = 0
 
         self.speed = 46 #?????????
 
@@ -60,8 +63,10 @@ class Drone:
         self.arrival_num = board.get_arrival_num()
         self.prob = board.get_prob()
         self.__total_events = board.get_total_events()
+        self.__learning_total_events = board.get_total_events()
         self.die_expo = board.get_die_expo()
         self.arrival_rate = board.get_arrival_rate()
+        self.gap = 0
 
         self.explore = [[self.__Tile() for j in range(self.__colDimension)] for i in
                         range(self.__rowDimension)]  # The board includes information that drone catches
@@ -84,18 +89,30 @@ class Drone:
         while True:
             if self.time_now > timeout:
                 break
-            self.fly()
+            self.gap = timeout-self.time_now
+            self.fly(self.gap)
+            # if 598 < self.gap < 602:
+            #     self.flag = 1
+            #     self.count += 1
+            # if self.flag == 1 and self.count == 1:
+            #     self.times_hasEvent = defaultdict(lambda: defaultdict(list))
+            #     self.total_visit = 0
+            #     self.total_events = 0
+            #     self.__events = dict()
+            #     self.event_set = set()
+
 
         self.end = self.time_now
         #self.count = self.missed_events()
 
-    def fly(self):
+    def fly(self, t):
         """
+        :param t: The time gap for how long it left
         fly the drone according to the policy
         """
         pre_dir = self.policy.get_direction()
-        reward = self.collect_data(self.cur_c, self.cur_r)
-        data = self.policy.random(reward)
+        reward = self.collect_data(self.cur_c, self.cur_r, t)
+        data = self.policy.random(reward, t, len(self.event_set)/self.__total_events)
         c = data[0]
         r = data[1]
         d = data[2]
@@ -105,12 +122,14 @@ class Drone:
         # adding noise
         self.time_now += self.get_wind_fly_time(d) + get_turn_fly_time(pre_dir, d)
         self.update_map()
+        #print(len(self.event_set), self.__total_events, self.flag)
 
-    def collect_data(self, c, r):
+    def collect_data(self, c, r, t):
         """
         For each sector we reached, we need to collect information from it, aka fly log
         :param c: the coloum of the board;
         :param r: the row of the board; wpl: the loaction of the sector
+        :param t: the time gap for how long it left
         """
         # Collect and update explore map
         self.total_visit += 1
@@ -122,17 +141,25 @@ class Drone:
         events = self.get_event(c, r)
         has_event = False
         event_id = []
-        if events:
-            has_event = True
-            self.total_events += len(events)
-            for event in events:
-                if event not in self.event_set:
-                    count_event += 1
-                event_id.append(event.id)
-                self.times_hasEvent[event][(c, r)].append(now_time)
-                self.event_set.add(event)
-        self.explore[c][r].has_event = has_event
-        self.explore[c][r].id = event_id
+        if self.gap <= 600:
+            if events:
+                has_event = True
+                self.total_events += len(events)
+                for event in events:
+                    if event not in self.event_set:
+                        count_event += 1
+                    event_id.append(event.id)
+                    self.times_hasEvent[event][(c, r)].append(now_time)
+                    self.event_set.add(event)
+            self.explore[c][r].has_event = has_event
+            self.explore[c][r].id = event_id
+        else:
+            if events:
+                self.learning_total_events += len(events)
+                for event in events:
+                    if event not in self.learning_event_set:
+                        count_event += 1
+                    self.learning_event_set.add(event)
 
         return count_event
 
@@ -181,8 +208,8 @@ class Drone:
         :return: None
         """
         for _ in range(self.arrival_num):
-            c = random.randint(0,self.__colDimension-1)
-            r = random.randint(0,self.__rowDimension-1)
+            c = random.randint(0, self.__colDimension-1)
+            r = random.randint(0, self.__rowDimension-1)
             new_event = Event(self.prob, self.die_expo, self.__colDimension-1, self.__rowDimension-1)
             new_event.update_sector(c, r)
             new_event.update_die_time(self.next_add_event_time)
@@ -192,6 +219,10 @@ class Drone:
             copy = list(self.__board[c][r].event_list)
             copy.append(new_event)
             self.__board[c][r].event_list = copy
+            # if self.flag == 1:
+            #     self.__total_events += 1
+            # else:
+            #     self.__learning_total_events += 1
             self.__total_events += 1
             self.__events[new_event] = (c, r)
             self.__board[c][r].num_of_events += 1
@@ -244,7 +275,7 @@ class Drone:
         if self.wind_direction == 0 and d == 0 or self.wind_direction == 1 and d == 1 or self.wind_direction == 2 and d == 2 or self.wind_speed == 3 and d == 3:
             return 10 / (5 + 0.2 * self.wind_speed)
         elif self.wind_direction == 0 and d == 1 or self.wind_direction == 1 and d == 0 or self.wind_direction == 2 and d == 3 or self.wind_speed == 3 and d == 2:
-            return -10 / (5 + 0.2 * self.wind_speed)
+            return 10 / (5 - 0.2 * self.wind_speed)
         else:
             return 10 / (5 + 0.1 * self.wind_speed)
 
