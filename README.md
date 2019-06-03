@@ -32,6 +32,11 @@ This is a new module for our Drone Explorer research project. Here we simulate t
   1 0.03 0.005 150 0.005
  ```
    meanings for columns from left to right:<br />
-   probability for staying in the sector, duration rate, arrive rate, arrive number, die rate.
+   probability for staying in the sector, events duration rate, events arrive rate, events arrive number, events die rate.
 
 ## Running the program
+We have four script files for 4 different variables (though there are five variables, we set arrive rate and die rate same):<br />
+   - DroneExplore_arrdie.sh
+   - DroneExplore_arrnum.sh
+   - DroneExplore_dur.sh
+   - DroneExplore_prob.sh
