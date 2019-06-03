@@ -51,20 +51,19 @@ Then, run the script to start the experiment.
 Finally, after it finishes, a corresponding csv file will be generated.
 
 ## File Descriptions
-### Arena.py
-This file contains Arena class, which contains the map that our agent(UAV) is going to explore
+More details are documented in each file
 ### Board.py
-This file contains Threading class, and this file will initiate the board to be explored
+This file contains Board class, which contains the map that our agent(UAV) is going to explore. This file will initiate the board to be explored.
 ### Distribution.py
 Contains distribution: exponential, random
 ### Drone.py
 This file controls the drone action
 ### Event.py
-This file generates corresponding graphs
-### Main.py
-This file contains main function for the board running in the background
+This file contains the Event object, which simulates and updates the event movements.
 ### Policy.py
-Contains policies drone will fly including: random, roomba
+Contains policies drone will fly including: random, roomba. Q-learning applies here.
 ### WriteReport.py
-Contains policies drone will fly including: random, roomba
+Generate the csv file from the collected data.
+### Main.py
+This file contains main function to start running the drone simulator. After the experiment finishes, it will generate the stats files.
 
