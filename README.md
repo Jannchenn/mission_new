@@ -40,3 +40,31 @@ We have four script files for 4 different variables (though there are five varia
    - DroneExplore_arrnum.sh
    - DroneExplore_dur.sh
    - DroneExplore_prob.sh
+For the variable to run experiments on, run the command
+```
+chmod 777 DroneExplore_(varname).sh
+```
+Then, run the script to start the experiment.
+```
+./DroneExplore_(varname).sh
+```
+Finally, after it finishes, a corresponding csv file will be generated.
+
+## File Descriptions
+### Arena.py
+This file contains Arena class, which contains the map that our agent(UAV) is going to explore
+### Board.py
+This file contains Threading class, and this file will initiate the board to be explored
+### Distribution.py
+Contains distribution: exponential, random
+### Drone.py
+This file controls the drone action
+### Event.py
+This file generates corresponding graphs
+### Main.py
+This file contains main function for the board running in the background
+### Policy.py
+Contains policies drone will fly including: random, roomba
+### WriteReport.py
+Contains policies drone will fly including: random, roomba
+
