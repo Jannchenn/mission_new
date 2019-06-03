@@ -63,7 +63,7 @@ This file contains the Event object, which simulates and updates the event movem
 ### Policy.py
 Contains policies drone will fly including: random, roomba. Q-learning applies here.
 ### WriteReport.py
-Generate the csv file from the collected data.
+Generate the csv file from the collected data; This file conmpute and analyze the result that drone collected
 ### Main.py
 This file contains main function to start running the drone simulator. After the experiment finishes, it will generate the stats files.
 
