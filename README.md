@@ -12,9 +12,9 @@ This is a new module for our Drone Explorer research project. Here we simulate t
 600     
 0 2     
 ```
-   line1: row col
-   line2: movements for the experiment
-   line3: wind_direction wind_speed
+   line1: row col<br />
+   line2: movements for the experiment<br />
+   line3: wind_direction wind_speed<br />
 
 3. Modily indep_var.txt for variables.
    Example for indep_var.txt
@@ -31,7 +31,7 @@ This is a new module for our Drone Explorer research project. Here we simulate t
   0.9 0.03 0.005 150 0.005
   1 0.03 0.005 150 0.005
  ```
-   meanings for columns from left to right:
+   meanings for columns from left to right:<br />
    probability for staying in the sector, duration rate, arrive rate, arrive number, die rate.
 
 ## Running the program
