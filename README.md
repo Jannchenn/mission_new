@@ -4,41 +4,34 @@ This is a new module for our Drone Explorer research project. Here we simulate t
 
 ## Getting Started
 
-Clone this project to your local machine.
-Modify fix_paras.txt for fixed parameters.
-Example for fix_paras.txt
+1. Clone this project to your local machine.
+2. Modify fix_paras.txt for fixed parameters.
+   Example for fix_paras.txt
 ```
-10 10   row col
-600     movements for the experiment
-0 2     wind_direction wind_speed
+10 10   
+600     
+0 2     
 ```
+line1: row col
+line2: movements for the experiment
+line3: wind_direction wind_speed
 
-## Built With
+3. Modily indep_var.txt for variables.
+   Example for indep_var.txt
+ ```
+  0.0 0.03 0.005 150 0.005
+  0.1 0.03 0.005 150 0.005
+  0.2 0.03 0.005 150 0.005
+  0.3 0.03 0.005 150 0.005
+  0.4 0.03 0.005 150 0.005
+  0.5 0.03 0.005 150 0.005
+  0.6 0.03 0.005 150 0.005
+  0.7 0.03 0.005 150 0.005
+  0.8 0.03 0.005 150 0.005
+  0.9 0.03 0.005 150 0.005
+  1 0.03 0.005 150 0.005
+ ```
+ meanings for columns from left to right:
+ probability for staying in the sector, duration rate, arrive rate, arrive number, die rate.
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+## Running the program
